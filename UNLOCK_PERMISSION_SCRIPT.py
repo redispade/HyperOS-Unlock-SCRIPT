@@ -39,8 +39,12 @@ col_yb = Style.BRIGHT + Fore.YELLOW # bright yellow
 col_r = Fore.RED # red
 col_rb = Style.BRIGHT + Fore.RED # bright red
 
+
 # Version and token number
-token_number = int(input(col_g + f"[Token line number]: " + Fore.RESET))
+if len(sys.argv) > 1:
+    token_number = int(sys.argv[1])
+else:
+    token_number = int(input(col_g + f"[Token line number]: " + Fore.RESET))
 os.system('cls' if os.name == 'nt' else 'clear')
 #token_number = 1
 scriptversion = "ARU_FHL_v070425"
@@ -122,7 +126,6 @@ def check_unlock_status(session, cookie_value, device_id):
 
         if response_data.get("code") == 100004:
             print(f"[Error] The cookie has expired, needs to be updated.")
-            input(f"Press Enter to close...")
             exit()
 
         data = response_data.get("data", {})
@@ -141,7 +144,6 @@ def check_unlock_status(session, cookie_value, device_id):
                 if (status_2 == 'y' or status_2 == 'Y' or status_2 == 'yes' or status_2 == 'Yes' or status_2 == 'YES'):
                     return True
                 else:
-                    input(f"Press Enter to close...")
                     exit()
             elif button_state == 3:
                 print(col_g + f"[Account status]: " + Fore.RESET + f"the account was created less than 30 days ago..")
@@ -149,7 +151,6 @@ def check_unlock_status(session, cookie_value, device_id):
                 if (status_3 == 'y' or status_3 == 'Y' or status_3 == 'yes' or status_3 == 'Yes' or status_3 == 'YES'):
                     return True
                 else:
-                    input(f"Press Enter to close...")
                     exit()
         elif is_pass == 1:
             message = col_g + f"[Account status]: " + Fore.RESET + f"the request was approved, unlock is possible until " f"{deadline_format}."
@@ -158,11 +159,9 @@ def check_unlock_status(session, cookie_value, device_id):
             plain_message = f"[Account status]: the request was approved, unlock is possible until {deadline_format}."
             with open("success.txt", "w") as f:
                 f.write(plain_message + "\n")
-            input(f"Press Enter to close...")
             exit()
         else:
             print(col_g + f"[Account status]: " + Fore.RESET + f"unknown status.")
-            input(f"Press Enter to close...")
             exit()
     except Exception as e:
         print(f"[Status check error] {e}")
@@ -214,8 +213,7 @@ def main():
     if check_unlock_status(session, cookie_value, device_id):
         start_beijing_time = get_initial_beijing_time()
         if start_beijing_time is None:
-            print(f"Failed to set initial time. Press Enter to close...")
-            input()
+            print(f"Failed to set initial time. Exiting...")
             exit()
 
         start_timestamp = time.time()
@@ -254,12 +252,10 @@ def main():
                         elif apply_result == 3:
                             deadline_format = data.get("deadline_format", "Не указано")
                             print(col_g + f"[Status]: " + Fore.RESET + f"The request was not sent, limit reached. Try again on {deadline_format} (Month/Day).")
-                            input(f"Press Enter to close...")
                             exit()
                         elif apply_result == 4:
                             deadline_format = data.get("deadline_format", "Не указано")
                             print(col_g + f"[Status]: " + Fore.RESET + f"The request was not sent, a block was imposed until {deadline_format} (Month/Day).")
-                            input(f"Press Enter to close...")
                             exit()
                     elif code == 100001:
                         print(col_g + f"[Status]: " + Fore.RESET + f"The request was rejected, error in the request..")
@@ -284,7 +280,6 @@ def main():
 
         except Exception as e:
             print(col_g + f"[Request error]: " + Fore.RESET + f"{e}")
-            input(f"Press Enter to close...")
             exit()
 
 if __name__ == "__main__":
