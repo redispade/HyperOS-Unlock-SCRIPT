@@ -40,11 +40,13 @@ col_r = Fore.RED # red
 col_rb = Style.BRIGHT + Fore.RED # bright red
 
 
+# Exit if any stop file exists
+for stopfile in ["success.txt", "blocked.txt", "account_age.txt"]:
+    if os.path.exists(stopfile):
+        print(f"{stopfile} exists. Exiting.")
+        exit()
 # Version and token number
-if len(sys.argv) > 1:
-    token_number = int(sys.argv[1])
-else:
-    token_number = int(input(col_g + f"[Token line number]: " + Fore.RESET))
+token_number = int(sys.argv[1])
 os.system('cls' if os.name == 'nt' else 'clear')
 #token_number = 1
 scriptversion = "ARU_FHL_v070425"
@@ -139,19 +141,17 @@ def check_unlock_status(session, cookie_value, device_id):
                     return True
 
             elif button_state == 2:
-                print(col_g + f"[Account status]: " + Fore.RESET + f"blocked from sending requests until " f"{deadline_format} (Month/Day).")
-                status_2 = (input(f"Continue (" + col_b + f"Yes/No" +Fore.RESET + f")?: ") )
-                if (status_2 == 'y' or status_2 == 'Y' or status_2 == 'yes' or status_2 == 'Yes' or status_2 == 'YES'):
-                    return True
-                else:
-                    exit()
+                message = f"blocked from sending requests until {deadline_format} (Month/Day)."
+                print(col_g + f"[Account status]: " + Fore.RESET + message)
+                with open("blocked.txt", "w") as f:
+                    f.write(message + "\n")
+                exit()
             elif button_state == 3:
-                print(col_g + f"[Account status]: " + Fore.RESET + f"the account was created less than 30 days ago..")
-                status_3 = (input(f"Continue (" + col_b + f"Yes/No" +Fore.RESET + f")?: ") )
-                if (status_3 == 'y' or status_3 == 'Y' or status_3 == 'yes' or status_3 == 'Yes' or status_3 == 'YES'):
-                    return True
-                else:
-                    exit()
+                message = "the account was created less than 30 days ago."
+                print(col_g + f"[Account status]: " + Fore.RESET + message)
+                with open("account_age.txt", "w") as f:
+                    f.write(message + "\n")
+                exit()
         elif is_pass == 1:
             message = col_g + f"[Account status]: " + Fore.RESET + f"the request was approved, unlock is possible until " f"{deadline_format}."
             print(message)
