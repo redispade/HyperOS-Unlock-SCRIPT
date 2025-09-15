@@ -1,22 +1,25 @@
-version: '3.8'
 services:
   unlock1:
     build: .
     volumes:
       - .:/app
     command: ["python", "UNLOCK_PERMISSION_SCRIPT.py", "1"]
+    restart: always
   unlock2:
     build: .
     volumes:
       - .:/app
     command: ["python", "UNLOCK_PERMISSION_SCRIPT.py", "2"]
+    restart: always
   unlock3:
     build: .
     volumes:
       - .:/app
     command: ["python", "UNLOCK_PERMISSION_SCRIPT.py", "3"]
+    restart: always
   unlock4:
     build: .
     volumes:
       - .:/app
     command: ["python", "UNLOCK_PERMISSION_SCRIPT.py", "4"]
+    restart: always
