@@ -43,7 +43,10 @@ col_rb = Style.BRIGHT + Fore.RED # bright red
 # Exit if any stop file exists
 for stopfile in ["success.txt", "blocked.txt", "account_age.txt"]:
     if os.path.exists(stopfile):
-        print(f"{stopfile} exists. Exiting.")
+        print(f"{stopfile} exists. Waiting for user to resolve and remove the file before restarting...")
+        while os.path.exists(stopfile):
+            time.sleep(1800)  # Sleep for 30 minutes before checking again
+        print(f"{stopfile} removed. Restarting to continue.")
         exit()
 # Version and token number
 token_number = int(sys.argv[1])
