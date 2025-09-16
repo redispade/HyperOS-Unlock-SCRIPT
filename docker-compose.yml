@@ -4,22 +4,22 @@ services:
     volumes:
       - .:/app
     command: ["python", "UNLOCK_PERMISSION_SCRIPT.py", "1"]
-    restart: always
+    restart: unless-stopped
   unlock2:
     build: .
     volumes:
       - .:/app
     command: ["python", "UNLOCK_PERMISSION_SCRIPT.py", "2"]
-    restart: always
+    restart: unless-stopped
   unlock3:
     build: .
     volumes:
       - .:/app
     command: ["python", "UNLOCK_PERMISSION_SCRIPT.py", "3"]
-    restart: always
+    restart: unless-stopped
   unlock4:
     build: .
     volumes:
       - .:/app
     command: ["python", "UNLOCK_PERMISSION_SCRIPT.py", "4"]
-    restart: always
+    restart: unless-stopped
